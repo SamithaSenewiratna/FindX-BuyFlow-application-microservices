@@ -14,6 +14,7 @@ const DiscountRoute = require('./route/DiscountRoute');
 const ProductRoute = require('./route/ProductRoute');
 const CartRoute = require('./route/CartRoute');
 const BookmarkRoute = require('./route/BookmarkRoute');
+const ReviewRooute = require('./route/ReviewRooute');
 //---------------------------------------------------------
 
  try {
@@ -38,4 +39,5 @@ const BookmarkRoute = require('./route/BookmarkRoute');
   app.use('/api/v1/products',ProductRoute);
   app.use('/api/v1/carts',CartRoute);
   app.use('/api/v1/bookmarks',BookmarkRoute);
- //----------------------------------------------
+  app.use('/api/v1/reviews',ReviewRooute);
+  //----------------------------------------------
