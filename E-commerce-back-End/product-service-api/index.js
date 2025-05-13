@@ -11,6 +11,7 @@
 const CategoryRoute = require('./route/CategoryRoute');
 const CountryRoute = require('./route/CountryRoute');
 const DiscountRoute = require('./route/DiscountRoute');
+const ProductRoute = require('./route/ProductRoute');
 //---------------------------------------------------------
 
  try {
@@ -31,5 +32,6 @@ const DiscountRoute = require('./route/DiscountRoute');
  //----------------------------------------------
   app.use('/api/v1/categories',CategoryRoute);
   app.use('/api/v1/countries',CountryRoute);
-  app.use('/api/v1/countries',DiscountRoute);
+  app.use('/api/v1/discounts',DiscountRoute);
+  app.use('/api/v1/products',ProductRoute);
  //----------------------------------------------
