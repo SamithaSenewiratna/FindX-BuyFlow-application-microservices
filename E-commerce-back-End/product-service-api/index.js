@@ -13,6 +13,7 @@ const CountryRoute = require('./route/CountryRoute');
 const DiscountRoute = require('./route/DiscountRoute');
 const ProductRoute = require('./route/ProductRoute');
 const CartRoute = require('./route/CartRoute');
+const BookmarkRoute = require('./route/BookmarkRoute');
 //---------------------------------------------------------
 
  try {
@@ -36,4 +37,5 @@ const CartRoute = require('./route/CartRoute');
   app.use('/api/v1/discounts',DiscountRoute);
   app.use('/api/v1/products',ProductRoute);
   app.use('/api/v1/carts',CartRoute);
+  app.use('/api/v1/bookmarks',BookmarkRoute);
  //----------------------------------------------
