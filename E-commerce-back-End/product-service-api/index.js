@@ -10,6 +10,7 @@
 //---------------------------------------------------------
 const CategoryRoute = require('./route/CategoryRoute');
 const CountryRoute = require('./route/CountryRoute');
+const DiscountRoute = require('./route/DiscountRoute');
 //---------------------------------------------------------
 
  try {
@@ -30,4 +31,5 @@ const CountryRoute = require('./route/CountryRoute');
  //----------------------------------------------
   app.use('/api/v1/categories',CategoryRoute);
   app.use('/api/v1/countries',CountryRoute);
+  app.use('/api/v1/countries',DiscountRoute);
  //----------------------------------------------
