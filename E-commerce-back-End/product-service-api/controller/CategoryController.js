@@ -35,7 +35,6 @@ const createCategory = async (request, response) => {
     }
 };
 
-
 const updateCategory = async (request, response) => {
   try {
     const { categoryName } = request.body;
@@ -60,7 +59,6 @@ const updateCategory = async (request, response) => {
 
 };
 
-
 const deleteCategory = async (request, response) => {
   try {
     const { id } = request.params;
@@ -82,7 +80,7 @@ const deleteCategory = async (request, response) => {
     }
 }
 
-const findCategoryById = async (request,response)=>{
+const findCategoryById = async (request,response) => {
     try {
         if (!request.params.id) {
             return response.status(400).json({ code: 400, message: 'Some feilds are missimg..' });
@@ -102,8 +100,21 @@ const findCategoryById = async (request,response)=>{
 
 const findAllCategories = async (request,response)=>{
   try {
-        const categories = await CategorySchema.find();
-        return response.status(200).json({ code: 200, message: 'Categories fetched successfully.', data: categories });
+        const {searchText, page=1,size=10}=request.query;
+        const pageIndex = parseInt(page);
+        const pageSize = parseInt(size);
+        
+        const quary = {};
+        if (searchText){
+            quary.$text={$search:searchText}
+        }
+        const skip = (pageIndex-1)*pageSize;
+        const categoryList = await CategorySchema.find(quary)
+           .limit(pageSize)
+           .skip(skip);
+        const categoryListCount = await CategorySchema.countDocuments(quary)
+            
+        return response.status(200).json({ code: 200, message: 'Categories fetched successfully.', data: {list: categoryList ,dataCount :categoryListCount} });
   } catch (error) {
         return response.status(500).json({ code: 500, message: 'Something went wrong.', error: error.message });
   }
