@@ -1,16 +1,14 @@
 package icet.edu.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name="orders_detail")
+@Builder
 public class OrderDetailEntity {
     @Id
     @Column(name="detail_id",unique = true,nullable = false,length = 70)
