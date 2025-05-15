@@ -9,7 +9,7 @@ public interface CustomerOrderService {
     public CustomerOrderResponse findOrderById(String orderId);
     public void updateOrder(CustomerOrderRequest request,String orderId);
     public void deleteById(String orderId);
-    public OrderPaginate searchAll(int page, int size,String searchText);
+    public OrderPaginate searchAll(String searchText ,int page, int size);
     public void manageRemark(String remark,String orderId);
     public void manageStatus(String status,String orderId);
 

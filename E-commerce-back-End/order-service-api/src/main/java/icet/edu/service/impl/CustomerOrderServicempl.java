@@ -104,7 +104,7 @@ public class CustomerOrderServicempl implements CustomerOrderService {
     }
 
     @Override
-    public OrderPaginate searchAll(int page, int size, String searchText) {
+    public OrderPaginate searchAll(String searchText ,int page, int size) {
         return OrderPaginate.builder()
                 .count(
                         customerOrderRepository.searchCount(searchText)
