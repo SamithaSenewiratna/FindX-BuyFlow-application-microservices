@@ -2,7 +2,10 @@ package icet.edu.controller;
 
 import icet.edu.dto.request.CustomerOrderRequest;
 import icet.edu.service.CustomerOrderService;
+import icet.edu.util.StandardResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -12,44 +15,72 @@ public class CustomerOrderController {
    private final CustomerOrderService customerOrderService;
 
    @PostMapping("/busness/create-order")
-   public String createOrder(@RequestBody CustomerOrderRequest request){
+   public ResponseEntity<StandardResponse> createOrder(@RequestBody CustomerOrderRequest request){
        customerOrderService.createOrder(request);
-       return "";
+      return new ResponseEntity<>(
+              new StandardResponse(
+                     201,"order created...",null
+              ), HttpStatus.CREATED
+      );
    }
 
     @GetMapping("/visitors/find-by-id/{id}")
-    public String findOrderById(@PathVariable  String id){
-        customerOrderService.findOrderById(id);
-        return "";
+    public ResponseEntity<StandardResponse> findOrderById(@PathVariable  String id){
+
+        return new ResponseEntity<>(
+                new StandardResponse(
+                        200,"order details",  customerOrderService.findOrderById(id)
+                ), HttpStatus.OK
+        );
     }
 
     @PutMapping("/busness/update-order/{id}")
-    public String updateOrder(@RequestBody CustomerOrderRequest request,@PathVariable String id){
+    public ResponseEntity<StandardResponse> updateOrder(@RequestBody CustomerOrderRequest request,@PathVariable String id){
         customerOrderService.updateOrder(request,id);
-        return "";
+        return new ResponseEntity<>(
+                new StandardResponse(
+                        200,"order updated...",null
+                ), HttpStatus.OK
+        );
     }
 
     @PutMapping("/busness/update-remark/{id}")
-    public String manageRemark(@RequestParam String remark,@PathVariable String id){
+    public ResponseEntity<StandardResponse> manageRemark(@RequestParam String remark,@PathVariable String id){
         customerOrderService.manageRemark(remark,id);
-        return "";
+        return new ResponseEntity<>(
+                new StandardResponse(
+                        200,"remark updated...",null
+                ), HttpStatus.OK
+        );
     }
 
     @PutMapping("/busness/update-status/{id}")
-    public String manageStatus(@RequestParam String status,@PathVariable String id){
+    public ResponseEntity<StandardResponse> manageStatus(@RequestParam String status,@PathVariable String id){
         customerOrderService.manageStatus(status,id);
-        return "";
+        return new ResponseEntity<>(
+                new StandardResponse(
+                        200,"status updated...",null
+                ), HttpStatus.OK
+        );
     }
 
     @DeleteMapping("/busness/deleteById/{id}")
-    public String deleteById(@PathVariable String id){
+    public ResponseEntity<StandardResponse> deleteById(@PathVariable String id){
         customerOrderService.deleteById(id);
-        return "";
+        return new ResponseEntity<>(
+                new StandardResponse(
+                        204,"order deleted...",null
+                ), HttpStatus.NO_CONTENT
+        );
     }
 
     @DeleteMapping("/visitors/search-All")
-    public String searchAll(@RequestParam String searchText,@RequestParam int page,@RequestParam int size ){
-        customerOrderService.searchAll(searchText,page,size);
-        return "";
+    public ResponseEntity<StandardResponse> searchAll(@RequestParam String searchText,@RequestParam int page,@RequestParam int size ){
+
+        return new ResponseEntity<>(
+                new StandardResponse(
+                        200,"order list",customerOrderService.searchAll(searchText,page,size)
+                ), HttpStatus.OK
+        );
     }
 }
