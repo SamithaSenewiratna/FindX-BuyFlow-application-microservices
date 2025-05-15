@@ -1,6 +1,6 @@
 spring :
   datasource:
-    url: jdbc:mysql://localhost:3306/order_service-api-DB?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/user_service-api-DB?createDatabaseIfNotExist=true
     username: root
     password: 1234
 
