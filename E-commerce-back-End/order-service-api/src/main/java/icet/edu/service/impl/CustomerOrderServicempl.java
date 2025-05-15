@@ -8,6 +8,7 @@ import icet.edu.dto.response.paginate.OrderPaginate;
 import icet.edu.entity.OrderDetailEntity;
 import icet.edu.entity.OrderEntity;
 import icet.edu.entity.OrderStatusEntity;
+import icet.edu.exception.EntryNotFoundException;
 import icet.edu.repository.CustomerOrderRepository;
 import icet.edu.repository.CustomerOrderStatusRepository;
 import icet.edu.service.CustomerOrderService;
@@ -60,7 +61,7 @@ public class CustomerOrderServicempl implements CustomerOrderService {
 
     @Override
     public CustomerOrderResponse findOrderById(String orderId) {
-     OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new RuntimeException(String.format("order not found..",orderId)));
+     OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new EntryNotFoundException(String.format("order status not found..",orderId)));
        return tocustomerOrderResponse(customerOrder);
 
     }
@@ -99,7 +100,7 @@ public class CustomerOrderServicempl implements CustomerOrderService {
 
     @Override
     public void deleteById(String orderId) {
-        OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new RuntimeException(String.format("order not found..",orderId)));
+        OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new EntryNotFoundException(String.format("order not found..",orderId)));
         customerOrderRepository.delete(customerOrder);
     }
 
@@ -120,7 +121,7 @@ public class CustomerOrderServicempl implements CustomerOrderService {
     @Override
     public void updateOrder(CustomerOrderRequest request, String orderId) {
 
-        OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new RuntimeException(String.format("order not found..",orderId)));
+        OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new EntryNotFoundException(String.format("order not found..",orderId)));
         customerOrder.setOrderDate(request.getOrderDate());
         customerOrder.setTotalAmount(request.getTotalAmount());
 
@@ -131,7 +132,7 @@ public class CustomerOrderServicempl implements CustomerOrderService {
     @Override
     public void manageRemark(String remark, String orderId) {
 
-        OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new RuntimeException(String.format("order not found..",orderId)));
+        OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new EntryNotFoundException(String.format("order not found..",orderId)));
         customerOrder.setRemark(remark);
         customerOrderRepository.save(customerOrder);
 
@@ -140,8 +141,8 @@ public class CustomerOrderServicempl implements CustomerOrderService {
     @Override
     public void manageStatus(String status, String orderId) {
 
-        OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new RuntimeException(String.format("order not found..",orderId)));
-        OrderStatusEntity orderStatus =  customerOrderStatusRepository.findByStatus(status).orElseThrow(()->new RuntimeException("Order Status Not Found......."));
+        OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new EntryNotFoundException(String.format("order not found..",orderId)));
+        OrderStatusEntity orderStatus =  customerOrderStatusRepository.findByStatus(status).orElseThrow(()->new EntryNotFoundException ("Order Status Not Found......."));
         customerOrder.setOrderStatus(orderStatus);
         customerOrderRepository.save(customerOrder);
     }
