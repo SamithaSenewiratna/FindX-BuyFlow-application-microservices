@@ -1,9 +1,48 @@
 import React, { useState } from 'react';
-import { Box, Button, Paper, TextField, Typography, CssBaseline,  Container, Link} from '@mui/material';
+import { Box,  Button, Paper, TextField, Typography, CssBaseline, Container,Link,Alert} from '@mui/material';
+
+const AuthService = {
+  login: async (email: string, password: string) => {
+    return new Promise<{ data: { access_token: string; refresh_token: string } }>((resolve, reject) =>
+      setTimeout(() => {
+        if (email === 'test@example.com' && password === 'password') {
+          resolve({
+            data: {
+              access_token: 'token123',
+              refresh_token: 'refresh123',
+            }
+          });
+        } else {
+          reject(new Error('Invalid credentials'));
+        }
+      }, 1000)
+    );
+  }
+};
 
 function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await AuthService.login(email, password);
+      const { access_token, refresh_token } = response.data;
+      console.log('Access Token:', access_token);
+      console.log('Refresh Token:', refresh_token);
+    
+    } catch (err: any) {
+      setError(err.message || 'Login failed');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -45,7 +84,14 @@ function App() {
             <Box
               component="form"
               sx={{ width: '100%', mt: 2 }}
+              onSubmit={handleLogin}
             >
+              {error && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {error}
+                </Alert>
+              )}
+
               <TextField
                 fullWidth
                 label="Email address"
@@ -78,6 +124,7 @@ function App() {
                 fullWidth
                 variant="contained"
                 color="primary"
+                disabled={loading}
                 sx={{
                   mt: 3,
                   py: 1.5,
@@ -87,7 +134,7 @@ function App() {
                   fontSize: '1rem',
                 }}
               >
-                Login
+                {loading ? 'Logging in...' : 'Login'}
               </Button>
 
               <Typography variant="body2" align="center" mt={3}>
