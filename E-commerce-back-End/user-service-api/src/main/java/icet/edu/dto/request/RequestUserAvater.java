@@ -1,0 +1,4 @@
+package icet.edu.dto.request;
+
+public class RequestUserAvater {
+}
