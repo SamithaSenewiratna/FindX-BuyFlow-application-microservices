@@ -1,0 +1,33 @@
+  .premium-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    background-color: #f3f4f6;
+    color: #374151;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 40px;
+  }
+
+  .footer-left {
+    font-weight: 500;
+  }
+
+  .footer-right {
+    display: flex;
+    gap: 16px;
+  }
+
+  .footer-link {
+    text-decoration: none;
+    color: #374151;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .footer-link:hover {
+    color: #111827;
+  }
+
