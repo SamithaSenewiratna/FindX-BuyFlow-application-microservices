@@ -6,16 +6,6 @@ import { NotFoundError } from 'rxjs';
 
 export const routes: Routes = [
 
-
-//      {path: '', redirectTo: '/context', pathMatch: 'full'},
-//   {
-//     path: 'context', component: ContextComponent,
-//     children: [
-//       {path:'',redirectTo:'/context/home',pathMatch:'full'},
-//       { path: 'home', component: HomepageComponent }
-//     ]
-//   }
-
 {path:'',redirectTo:'/process',pathMatch:'full'},
 {
     path:'process',loadChildren:
