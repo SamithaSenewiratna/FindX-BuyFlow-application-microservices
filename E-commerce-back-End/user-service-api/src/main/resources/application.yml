@@ -1,10 +1,26 @@
-spring :
+server:
+  port: 8082
+
+spring:
+  application:
+    name: user-service-api
+
   datasource:
     url: jdbc:mysql://localhost:3306/user_service-api-DB?createDatabaseIfNotExist=true
     username: root
     password: 1234
 
-
   jpa:
     hibernate:
       ddl-auto: update
+
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+#    register-with-eureka: true
+#    fetch-registry: true
+#
+#  instance:
+#    prefer-ip-address: true
