@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Email Notification - Sell X</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f6f9fc;
+          margin: 0;
+          padding: 0;
+        }
+        .container {
+          background-color: #ffffff;
+          max-width: 600px;
+          margin: 30px auto;
+          padding: 30px;
+          border-radius: 8px;
+          box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        .header {
+          text-align: center;
+          padding-bottom: 20px;
+          border-bottom: 1px solid #ddd;
+        }
+        .content {
+          margin-top: 20px;
+          color: #333;
+        }
+        .button {
+          margin-top: 30px;
+          text-align: center;
+        }
+        .button a {
+          background-color: #000000;
+          color: white;
+          padding: 12px 25px;
+          text-decoration: none;
+          border-radius: 5px;
+          font-weight: bold;
+        }
+        .footer {
+          margin-top: 40px;
+          font-size: 12px;
+          color: #888;
+          text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h2>Welcome to Sell X!</h2>
+    </div>
+
+    <div class="content">
+        <p>Hi {{name}},</p>
+        <p>Thank you for registering with <strong>Sell X</strong>. We're excited to have you on board.</p>
+
+        <p>To verify your email address and get started, please click the button below:</p>
+
+        <div class="button">
+            <a href="{{verification_link}}" target="_blank">Verify Email</a>
+        </div>
+
+        <p>If you did not request this, please ignore this email.</p>
+    </div>
+
+    <div class="footer">
+        &copy; 2025 Sell X. All rights reserved.<br>
+        This is an automated message — please do not reply.
+    </div>
+</div>
+
+</body>
+</html>
