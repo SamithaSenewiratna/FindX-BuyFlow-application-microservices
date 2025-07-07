@@ -1,7 +1,4 @@
 import { Routes } from '@angular/router';
-import { ContextComponent } from './modules/process/components/context/context.component';
-import { HomepageComponent } from './modules/process/components/homepage/homepage.component';
-import { NotFoundError } from 'rxjs';
 
 
 export const routes: Routes = [
