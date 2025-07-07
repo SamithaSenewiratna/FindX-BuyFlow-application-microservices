@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,8 +23,8 @@ public class OrderEntity {
     @Column(name="order_date",nullable = false,columnDefinition = "DATETIME")
     private Date orderDate;
     @Column(name="total_amount",nullable = false,precision = 10,scale = 2)
-    private Double totalAmount;
-    @Column(name="order_id",nullable = false,length = 70)
+    private BigDecimal totalAmount;
+    @Column(name="user_id",nullable = false,length = 70)
     private String userId;
     @Column(name="remark",length = 700)
     private String remark;

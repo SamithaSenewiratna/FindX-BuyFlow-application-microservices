@@ -15,6 +15,8 @@ import icet.edu.service.CustomerOrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -34,7 +36,7 @@ public class CustomerOrderServicempl implements CustomerOrderService {
          customerOrder.setOrderId(UUID.randomUUID().toString());
          customerOrder.setOrderDate(request.getOrderDate());
          customerOrder.setRemark("");
-         customerOrder.setTotalAmount(request.getTotalAmount());
+         customerOrder.setTotalAmount(BigDecimal.valueOf(request.getTotalAmount()));
          customerOrder.setOrderId(request.getUserId());
 
          customerOrder.setOrderStatus(orderStatus);
@@ -51,8 +53,8 @@ public class CustomerOrderServicempl implements CustomerOrderService {
         }
         return OrderDetailEntity.builder()
                 .detailId(UUID.randomUUID().toString())
-                .unitPrice(orderDetailRequest.getUnitPrice())
-                .discount(orderDetailRequest.getDiscount())
+                .unitPrice(BigDecimal.valueOf(orderDetailRequest.getUnitPrice()))
+                .discount(BigDecimal.valueOf(orderDetailRequest.getDiscount()))
                 .qty(orderDetailRequest.getQty())
                 .customerOrder(order)
                 .build();
@@ -123,7 +125,7 @@ public class CustomerOrderServicempl implements CustomerOrderService {
 
         OrderEntity customerOrder  =  customerOrderRepository.findById(orderId).orElseThrow(()->new EntryNotFoundException(String.format("order not found..",orderId)));
         customerOrder.setOrderDate(request.getOrderDate());
-        customerOrder.setTotalAmount(request.getTotalAmount());
+        customerOrder.setTotalAmount(BigDecimal.valueOf(request.getTotalAmount()));
 
         customerOrderRepository.save(customerOrder);
     }

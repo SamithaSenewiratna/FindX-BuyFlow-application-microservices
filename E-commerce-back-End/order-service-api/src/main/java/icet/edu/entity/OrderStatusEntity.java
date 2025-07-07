@@ -21,7 +21,7 @@ public class OrderStatusEntity {
     @Id
     @Column(name = "status_id" , unique = true,nullable = false,length = 70)
     private String statusId;
-    @Column(name = "status" , unique = true, nullable = false,length = 70) //only one
+    @Column(name = "status" , unique = true, nullable = false,length = 70)
     private String status;
 
     @OneToMany(mappedBy = "orderStatus")
