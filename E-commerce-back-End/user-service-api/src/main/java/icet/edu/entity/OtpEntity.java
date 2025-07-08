@@ -29,8 +29,6 @@ public class OtpEntity {
     @JoinColumn(name="user_property_id", referencedColumnName = "property_id",nullable = false)
     private UserEntity systemUser;
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private UserEntity user;
+
 
 }

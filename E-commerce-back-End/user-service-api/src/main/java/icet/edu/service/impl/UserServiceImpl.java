@@ -7,17 +7,16 @@ import icet.edu.dto.request.RequestUserPasswordReset;
 import icet.edu.dto.response.ResponseUser;
 import icet.edu.entity.OtpEntity;
 import icet.edu.entity.UserEntity;
-import icet.edu.exceptions.DuplicateEntryException;
+import icet.edu.exceptions.*;
 import icet.edu.repository.OtpRepository;
 import icet.edu.repository.UserRepository;
 import icet.edu.service.EmailService;
 import icet.edu.service.UserService;
 import icet.edu.util.FileDataExtractor;
 import icet.edu.util.OtpGenerator;
+import io.jsonwebtoken.io.IOException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
-
-import org.keycloak.adapters.spi.HttpFacade;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
@@ -25,7 +24,6 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -119,13 +117,74 @@ public class UserServiceImpl implements UserService {
 
         }
 
-
-
-
     }
 
     @Override
     public boolean verifyEmail(String otp, String email) {
+        try {
+            Optional<UserEntity> selectedUserObj = userRepository.findByUsename(email);
+            if(selectedUserObj.isEmpty()){
+                throw new EntryNotFoundException("Unable to find any users");
+            }
+            UserEntity systemUser = selectedUserObj.get();
+
+            OtpEntity selectedOtpObj = systemUser.getOtp();
+
+            if(selectedOtpObj.isVerified()){
+                throw new BadRequestException("this OTP has already in used");
+            }
+            if(selectedOtpObj.getAttempts()>=5){
+                String code = otpGenerator.generateOtp(4);
+
+            emailService.sendUserSignupVerificationCode(email,"Verify Your Email for access",code);
+
+             selectedOtpObj.setAttempts(0);
+             selectedOtpObj.setCode(code);
+             selectedOtpObj.setCreatedDate(new Date());
+             otpRepository.save(selectedOtpObj);
+
+           throw new TooManyRequestException("Too many unsucessful attempts New OTP sent and try again");
+
+          }
+
+          if(selectedOtpObj.getCode().equals(otp)){
+              UserRepresentation keycloakUser = keycloakUtil.getKeycloakInstance().realm(realm)
+                      .users()
+                      .search(email)
+                      .stream()
+                      .findFirst()
+                      .orElseThrow(()->new EntryNotFoundException("User Not Found!"));
+
+              keycloakUser.setEmailVerified(true);
+              keycloakUser.setEnabled(true);
+
+              keycloakUtil.getKeycloakInstance().realm(realm)
+                      .users()
+                      .get(keycloakUser.getId())
+                      .update(keycloakUser);
+
+              systemUser.setActiveStatus(true);
+              systemUser.setIsEnabled(true);
+              systemUser.setIsEmailVerified(true);
+
+              userRepository.save(systemUser);
+
+              selectedOtpObj.setVerified(true);
+              selectedOtpObj.setAttempts(selectedOtpObj.getAttempts()+1);
+
+              otpRepository.save(selectedOtpObj);
+
+              return true;
+
+          }else {
+              selectedOtpObj.setAttempts(selectedOtpObj.getAttempts()+1);
+              otpRepository.save(selectedOtpObj);
+          }
+
+
+        }catch (IOException exception){
+            throw new InternalServerException("Something went wrong pleace try again later..");
+        }
         return false;
     }
 
