@@ -20,5 +20,9 @@ public class UserAvatarEntity {
     @Embedded
     private FileResource fileResource;
 
+    @OneToOne
+    @JoinColumn(name="user_id",nullable = false,unique = true)
+    private UserEntity user;
+
 
 }

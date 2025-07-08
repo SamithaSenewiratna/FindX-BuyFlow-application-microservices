@@ -1,9 +1,6 @@
 package icet.edu.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,5 +24,8 @@ public class ShippingAddressEntity {
     @Column( nullable = false,length = 50)
     private String street;
 
+    @OneToOne
+    @JoinColumn(name="user_id",nullable = false,unique = true)
+    private UserEntity user;
 
 }
