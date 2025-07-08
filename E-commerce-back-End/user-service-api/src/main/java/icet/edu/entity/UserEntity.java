@@ -1,18 +1,15 @@
 package icet.edu.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.Date;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -27,6 +24,33 @@ public class UserEntity {
     private String LastName;
     @Column(name ="active_status",columnDefinition = "TINYINT")
     private boolean activeStatus;
-    @Column(name = "otp" , nullable = false)
-    private int otp;
+
+    @OneToOne(mappedBy = "user")
+    private ShippingAddressEntity shippingAddress;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private BillingAddressEntity billingAddress;
+
+    @OneToOne(mappedBy = "user")
+    private UserAvatarEntity userAvatar;
+
+    @OneToOne(mappedBy = "systemUser", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private OtpEntity otp;
+
+
+    @Column(name = "is_account_non_expired",columnDefinition = "TINYINT",nullable = false)
+    private Boolean isAccountNonExpired;
+
+    @Column(name = "is_email_verified",columnDefinition = "TINYINT",nullable = false)
+    private Boolean isEmailVerified;
+
+    @Column(name = "is_account_non_locked",columnDefinition = "TINYINT",nullable = false)
+    private Boolean isAccountNonLocked;
+
+    @Column(name = "is_enabled",columnDefinition = "TINYINT",nullable = false)
+    private Boolean isEnabled;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name ="created_datae",nullable = false,columnDefinition = "DATETIME")
+    private Date createdDate;
 }
