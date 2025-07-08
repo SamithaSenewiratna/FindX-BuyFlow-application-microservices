@@ -1,4 +1,4 @@
-# 🛍️ FindX TradeStack Application
+# 🛍️ FindX BuyFlow Application
 
 A scalable, modular, and modern E-Commerce platform built using Micro-Frontends and Microservices architecture, supporting both web and mobile shopping experiences.
 
