@@ -17,12 +17,21 @@ import icet.edu.util.OtpGenerator;
 import io.jsonwebtoken.io.IOException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
 
 import java.util.*;
 
@@ -65,14 +74,14 @@ public class UserServiceImpl implements UserService {
         existingUser = keycloak.realm(realm).users().search(dto.getUsername()).stream()
                 .findFirst().orElse(null);
         if(existingUser != null){
-            Optional<UserEntity> byEmail = userRepository.findByUsename(existingUser.getEmail());
+            Optional<UserEntity> byEmail = userRepository.findByUsername(existingUser.getEmail());
             if(byEmail.isEmpty()){
                 keycloak.realm(realm).users().delete(existingUser.getId());
             }else {
                 throw new DuplicateEntryException("User with email"+dto.getUsername()+"already exists");
             }
         }else{
-          Optional<UserEntity> byEmail = userRepository.findByUsename(dto.getUsername());
+          Optional<UserEntity> byEmail = userRepository.findByUsername(dto.getUsername());
             if (byEmail.isPresent()) {
                 Optional<OtpEntity> bySystemUserId = otpRepository.findBySystemUserId(byEmail.get().getUserId());
                 if (bySystemUserId.isPresent()) {
@@ -122,7 +131,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean verifyEmail(String otp, String email) {
         try {
-            Optional<UserEntity> selectedUserObj = userRepository.findByUsename(email);
+            Optional<UserEntity> selectedUserObj = userRepository.findByUsername(email);
             if(selectedUserObj.isEmpty()){
                 throw new EntryNotFoundException("Unable to find any users");
             }
@@ -190,7 +199,61 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Object userLogin(RequestUserLoginRequest request) {
-        return null;
+        try {
+            Optional<UserEntity> selectedUserObj = userRepository.findByUsername(request.getUsername());
+            UserEntity systemUser = selectedUserObj.get();
+
+            if (!systemUser.getIsEmailVerified()) {
+                OtpEntity selecedOtpObj = systemUser.getOtp();
+
+                if (selecedOtpObj.getAttempts() >= 5) {
+                    String code = otpGenerator.generateOtp(4);
+                    emailService.sendUserSignupVerificationCode(
+                            systemUser.getUserName(),
+                            "Verify Your Email Address for Access",
+                            code
+                    );
+
+                    selecedOtpObj.setAttempts(0);
+                    selecedOtpObj.setCode(code);
+                    selecedOtpObj.setCreatedDate(new Date());
+                    otpRepository.save(selecedOtpObj);
+
+                    throw new TooManyRequestException("Too many unsuccessful attempts. New OTP sent. Try again.");
+                }
+
+                emailService.sendUserSignupVerificationCode(
+                        systemUser.getFirstName(),
+                        "Verify Your Email Address For Access",
+                        selecedOtpObj.getCode()
+                );
+                throw new RedirectionException("Your email has not been verified. Please verify your email.");
+            } else {
+                MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+                requestBody.add("client_id", clientId);
+                requestBody.add("grant_type", OAuth2Constants.PASSWORD);
+                requestBody.add("username", request.getUsername());
+                requestBody.add("client_secret", secret);
+                requestBody.add("password", request.getPassword());
+
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+                HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(requestBody, headers);
+                RestTemplate restTemplate = new RestTemplate();
+                ResponseEntity<Object> response = restTemplate.postForEntity(keyCloakApiUrl, httpEntity, Object.class);
+
+                return response.getBody();
+            }
+        } catch (Exception e) {
+            if (e instanceof RedirectionException) {
+                throw new RedirectionException("Your email has not been verified.");
+            } else if (e instanceof TooManyRequestException) {
+                throw new TooManyRequestException("Too many unsuccessful attempts.");
+            } else {
+                throw new UnauthorizedException("Invalid username or password.");
+            }
+        }
     }
 
     @Override
