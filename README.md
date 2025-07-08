@@ -54,7 +54,7 @@ Fully integrated mobile shopping experience built with **React Native**:
 
 ## 📷 Screenshots
 
-
+![homePage](screenshots/mainImg.png)
 
 ---
 
