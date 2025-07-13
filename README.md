@@ -28,7 +28,7 @@ A scalable, modular, and modern E-Commerce platform built using Micro-Frontends 
 
 ---
 
-## 📱 Mobile App – FindX On-the-Go
+## 📱 Mobile App – FindX On-the-Go  🔗 [Link here](https://github.com/SamithaSenewiratna/FindX-moblie-app-ReactNative)
 
 Fully integrated mobile shopping experience built with **React Native**:
 - Product browsing and purchasing
