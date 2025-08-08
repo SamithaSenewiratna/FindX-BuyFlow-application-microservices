@@ -1,1 +1,60 @@
-<p>homepage worksevdec!</p>
+<section class="hero">
+  <div class="hero__content">
+    <h1>Find the Best Deals, Fast.</h1>
+    <p>Search, compare, and buy the right product with confidence.</p>
+    <div class="hero__search">
+      <input type="text" placeholder="Search for products..." />
+      <button>Search</button>
+    </div>
+  </div>
+</section>
+
+<section class="categories">
+  <h2>Popular Categories</h2>
+  <div class="categories__list">
+    <button>Phones</button>
+    <button>Laptops</button>
+    <button>Appliances</button>
+    <button>Smart Watches</button>
+    <button>Headphones</button>
+  </div>
+</section>
+
+<section class="featured">
+  <h2>Featured Products</h2>
+  <div class="featured__grid">
+    <div class="product-card" *ngFor="let product of featuredProducts">
+      <img src="https://via.placeholder.com/200" alt="Product" />
+      <h4>Product Name</h4>
+      <p>$199.99</p>
+      <button>View</button>
+    </div>
+  </div>
+</section>
+
+<section class="why-us">
+  <h2>Why Choose FindX?</h2>
+  <div class="why-us__features">
+    <div>
+      <i class="fas fa-shipping-fast"></i>
+      <p>Fast Delivery</p>
+    </div>
+    <div>
+      <i class="fas fa-tags"></i>
+      <p>Best Prices</p>
+    </div>
+    <div>
+      <i class="fas fa-shield-alt"></i>
+      <p>Secure Checkout</p>
+    </div>
+  </div>
+</section>
+
+<section class="newsletter">
+  <h3>Stay in the loop</h3>
+  <p>Subscribe to get the latest updates and offers.</p>
+  <div class="newsletter__input">
+    <input type="email" placeholder="Enter your email" />
+    <button>Subscribe</button>
+  </div>
+</section>
